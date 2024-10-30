@@ -1,24 +1,15 @@
-import React, { useState } from 'react';
-import { createPoll } from '../api/pollApi';
-import { NewPoll } from '../types/Poll';
-import { useNavigate } from 'react-router-dom';
+import useCreatePoll from '../hooks/useCreatePoll'
 
-const CreatePoll: React.FC = () => {
-  const [question, setQuestion] = useState('');
-  const [options, setOptions] = useState<string[]>(['', '']);
-  const navigate = useNavigate();
-
-  const handleCreatePoll = async () => {
-    const newPoll: NewPoll = { question, options };
-    await createPoll(newPoll);
-    navigate('/polls');
-  };
-
-  const handleOptionChange = (index: number, value: string) => {
-    const newOptions = [...options];
-    newOptions[index] = value;
-    setOptions(newOptions);
-  };
+const CreatePoll: React.FC<{ onBack: () => void }> = ({ onBack }) => {
+  const {
+    question,
+    setQuestion,
+    options,
+    handleCreatePoll,
+    handleOptionChange,
+    handleRemoveOption,
+    handleAddOption,
+  } = useCreatePoll();
 
   return (
     <div>
@@ -31,15 +22,19 @@ const CreatePoll: React.FC = () => {
         placeholder="Poll question"
       />
       {options.map((option, index) => (
-        <input
-          key={index}
-          type="text"
-          value={option}
-          onChange={(e) => handleOptionChange(index, e.target.value)}
-          placeholder={`Option ${index + 1}`}
-        />
+        <div>
+          <input
+            key={index}
+            type="text"
+            value={option}
+            onChange={(e) => handleOptionChange(index, e.target.value)}
+            placeholder={`Option ${index + 1}`}
+          />
+          <button onClick={() => handleRemoveOption(index)}>Remove</button>
+        </div>
       ))}
-      <button onClick={() => setOptions([...options, ''])}>Add Option</button>
+      <button onClick={() => handleAddOption()}>Add Option</button>
+      <button onClick={onBack}>Back to Polls</button>
     </div>
   );
 };

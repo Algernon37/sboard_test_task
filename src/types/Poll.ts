@@ -15,4 +15,9 @@ export interface NewPoll {
 
 export interface PollProps {
     pollId: string;
+    onBack: () => void;
+}
+
+export interface CreatePollProps {
+    onBack: () => void;
 }

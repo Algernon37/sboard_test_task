@@ -1,9 +1,9 @@
-import AppRouter from './components/AppRouter'
 import './App.css'
+import PollList from './components/PollList'
 
 const App: React.FC = () => {
   return (
-    <AppRouter />
+    <PollList />
   )
 }
 
